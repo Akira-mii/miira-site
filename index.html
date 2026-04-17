@@ -1,11 +1,512 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MiiRa</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mii-Râ — Comprendre les Femmes / Understanding Women</title>
+<meta name="description" content="Le livre qui décrypte la psychologie féminine. The book that decodes female psychology.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #000000;
+    --white: #ffffff;
+    --off-white: #f0ede8;
+    --gray: #888888;
+    --light-gray: #cccccc;
+    --accent: #c8a96e;
+    --accent-dark: #9e7e48;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* LANG SWITCHER */
+  .lang-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: flex-end;
+    padding: 18px 40px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+  }
+
+  .lang-switcher {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .lang-btn {
+    background: none;
+    border: none;
+    color: var(--gray);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    cursor: pointer;
+    padding: 6px 10px;
+    transition: color 0.3s;
+    text-transform: uppercase;
+  }
+
+  .lang-btn.active {
+    color: var(--white);
+    border-bottom: 1px solid var(--accent);
+  }
+
+  .lang-btn:hover { color: var(--white); }
+
+  .lang-divider {
+    color: var(--gray);
+    font-size: 10px;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 100px 40px 60px;
+    position: relative;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(ellipse at 50% 30%, rgba(200,169,110,0.06) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .logo-wrap {
+    margin-bottom: 50px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.2s;
+  }
+
+  .logo-wrap img {
+    width: 120px;
+    height: 120px;
+    object-fit: contain;
+  }
+
+  .hero-content {
+    text-align: center;
+    max-width: 700px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.5s;
+  }
+
+  .book-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+
+  .hero-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 8vw, 96px);
+    font-weight: 300;
+    line-height: 1;
+    letter-spacing: -1px;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--off-white);
+  }
+
+  .hero-subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 2.5vw, 22px);
+    font-weight: 300;
+    color: var(--gray);
+    letter-spacing: 1px;
+    margin-bottom: 50px;
+    font-style: italic;
+  }
+
+  .book-cover-wrap {
+    margin: 0 auto 50px;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.8s;
+    position: relative;
+  }
+
+  .book-cover-wrap img {
+    width: min(280px, 70vw);
+    border-radius: 4px;
+    box-shadow:
+      -8px 8px 30px rgba(0,0,0,0.8),
+      -2px 2px 6px rgba(0,0,0,0.6),
+      inset -3px 0 10px rgba(0,0,0,0.4);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .book-cover-wrap img:hover {
+    transform: translateY(-6px) rotateY(-3deg);
+    box-shadow:
+      -14px 14px 40px rgba(0,0,0,0.9),
+      -4px 4px 10px rgba(0,0,0,0.7);
+  }
+
+  .cta-wrap {
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.1s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--white);
+    color: var(--black);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 18px 42px;
+    transition: background 0.3s, color 0.3s, transform 0.2s;
+    border-radius: 0;
+  }
+
+  .cta-btn:hover {
+    background: var(--accent);
+    color: var(--black);
+    transform: translateY(-2px);
+  }
+
+  .cta-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .cta-hint {
+    font-size: 11px;
+    color: var(--gray);
+    letter-spacing: 1px;
+  }
+
+  /* SEPARATOR */
+  .sep {
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    margin: 0 auto;
+  }
+
+  /* ABOUT SECTION */
+  .about {
+    padding: 80px 40px;
+    max-width: 680px;
+    margin: 0 auto;
+    text-align: center;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 1.4s;
+  }
+
+  .about-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 3.5vw, 36px);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.4;
+    color: var(--off-white);
+    margin-bottom: 30px;
+  }
+
+  .about-quote span {
+    color: var(--accent);
+  }
+
+  .about-body {
+    font-size: 13px;
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--light-gray);
+    letter-spacing: 0.3px;
+  }
+
+  /* FORMATS */
+  .formats {
+    padding: 60px 40px;
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .formats-title {
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: var(--gray);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+
+  .formats-list {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+
+  .format-item {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    color: var(--light-gray);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .format-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  /* FOOTER */
+  footer {
+    padding: 50px 40px;
+    text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .footer-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    font-weight: 300;
+    letter-spacing: 6px;
+    color: var(--gray);
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+
+  .footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--gray);
+    text-decoration: none;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .footer-links a:hover { color: var(--white); }
+
+  .footer-copy {
+    font-size: 10px;
+    color: rgba(255,255,255,0.2);
+    letter-spacing: 1px;
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* LANG CONTENT */
+  [data-lang] { display: none; }
+  [data-lang].visible { display: block; }
+  [data-lang-inline] { display: none; }
+  [data-lang-inline].visible { display: inline; }
+
+  /* MOBILE */
+  @media (max-width: 600px) {
+    .hero { padding: 80px 24px 40px; }
+    .lang-bar { padding: 16px 24px; }
+    .about { padding: 60px 24px; }
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome to MiiRa</h1>
+
+<!-- LANG SWITCHER -->
+<div class="lang-bar">
+  <div class="lang-switcher">
+    <button class="lang-btn" id="btn-fr" onclick="setLang('fr')">FR</button>
+    <span class="lang-divider">/</span>
+    <button class="lang-btn" id="btn-en" onclick="setLang('en')">EN</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="logo-wrap">
+    <img src="images/logo.png" alt="Mii-Râ">
+  </div>
+
+  <div class="hero-content">
+    <p class="book-label">
+      <span data-lang="fr" class="visible">Un livre de Mii-Râ</span>
+      <span data-lang="en">A book by Mii-Râ</span>
+    </p>
+
+    <h1 class="hero-title">
+      <span data-lang="fr" class="visible">Comprendre<br><em>les Femmes</em></span>
+      <span data-lang="en">Understanding<br><em>Women</em></span>
+    </h1>
+
+    <p class="hero-subtitle">
+      <span data-lang="fr" class="visible">Psychologie féminine &amp; secrets d'une connexion profonde</span>
+      <span data-lang="en">Female psychology &amp; secrets to real connection</span>
+    </p>
+  </div>
+
+  <div class="book-cover-wrap">
+    <img id="book-cover" src="images/cover-fr.jpg" alt="Couverture du livre">
+  </div>
+
+  <div class="cta-wrap">
+    <a id="amazon-btn" href="https://amzn.eu/d/02xhul7r" target="_blank" class="cta-btn">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M5 12h14M12 5l7 7-7 7"/>
+      </svg>
+      <span data-lang="fr" class="visible">Obtenir le livre</span>
+      <span data-lang="en">Get the book</span>
+    </a>
+    <p class="cta-hint">
+      <span data-lang="fr" class="visible">Disponible en paperback &amp; ebook</span>
+      <span data-lang="en">Available in paperback &amp; ebook</span>
+    </p>
+  </div>
+</section>
+
+<div class="sep"></div>
+
+<!-- ABOUT -->
+<section class="about">
+  <p class="about-quote">
+    <span data-lang="fr" class="visible">
+      "Tu ne comprends pas les femmes.<br>
+      Ce n'est pas <span>ta faute</span>.<br>
+      Personne ne t'a expliqué."
+    </span>
+    <span data-lang="en">
+      "You don't understand women.<br>
+      That's not <span>your fault</span>.<br>
+      Nobody ever explained it."
+    </span>
+  </p>
+
+  <p class="about-body">
+    <span data-lang="fr" class="visible">
+      Ce livre décrypte les mécanismes réels de la psychologie féminine — sans tabou, sans langue de bois. Pas pour manipuler. Pour comprendre. Et reprendre le contrôle.
+    </span>
+    <span data-lang="en">
+      This book decodes the real mechanisms of female psychology — without filters, without sugarcoating. Not to manipulate. To understand. And take back control.
+    </span>
+  </p>
+</section>
+
+<div class="sep"></div>
+
+<!-- FORMATS -->
+<div class="formats">
+  <p class="formats-title">
+    <span data-lang="fr" class="visible">Formats disponibles</span>
+    <span data-lang="en">Available formats</span>
+  </p>
+  <div class="formats-list">
+    <span class="format-item">
+      <span class="format-dot"></span>
+      <span data-lang="fr" class="visible">Paperback — 17,99€</span>
+      <span data-lang="en">Paperback — $17.99</span>
+    </span>
+    <span class="format-item">
+      <span class="format-dot"></span>
+      <span data-lang="fr" class="visible">Ebook — 6,99€</span>
+      <span data-lang="en">Ebook — $9.99</span>
+    </span>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-logo">Mii-Râ</p>
+  <div class="footer-links">
+    <a href="https://www.tiktok.com/@mii.ra_off" target="_blank">TikTok FR</a>
+    <a href="https://www.tiktok.com/@miira.en" target="_blank">TikTok EN</a>
+    <a href="https://amzn.eu/d/02xhul7r" target="_blank">Amazon FR</a>
+    <a href="https://a.co/d/0f3NSMBO" target="_blank">Amazon EN</a>
+  </div>
+  <p class="footer-copy">© 2025 Mii-Râ. All rights reserved.</p>
+</footer>
+
+<script>
+  const content = {
+    fr: {
+      cover: 'images/cover-fr.jpg',
+      amazon: 'https://amzn.eu/d/02xhul7r',
+      title: 'Mii-Râ — Comprendre les Femmes'
+    },
+    en: {
+      cover: 'images/cover-en.jpg',
+      amazon: 'https://a.co/d/0f3NSMBO',
+      title: 'Mii-Râ — Understanding Women'
+    }
+  };
+
+  function setLang(lang) {
+    document.querySelectorAll('[data-lang]').forEach(el => {
+      el.classList.toggle('visible', el.dataset.lang === lang);
+    });
+    document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.getElementById('book-cover').src = content[lang].cover;
+    document.getElementById('amazon-btn').href = content[lang].amazon;
+    document.documentElement.lang = lang;
+    document.title = content[lang].title;
+    localStorage.setItem('miira-lang', lang);
+  }
+
+  function detectLang() {
+    const saved = localStorage.getItem('miira-lang');
+    if (saved) return saved;
+    const browser = navigator.language || navigator.userLanguage || 'fr';
+    return browser.toLowerCase().startsWith('fr') ? 'fr' : 'en';
+  }
+
+  setLang(detectLang());
+</script>
 </body>
 </html>
